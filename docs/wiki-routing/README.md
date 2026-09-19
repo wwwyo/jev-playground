@@ -59,4 +59,18 @@ bun run wiki-routing:evaluate   # 3 つの router を評価して results/wiki-r
 - `jev` が正解ページに付けた確率は中央値 0.92、最小 0.26。不正解ページに 0.5 以上が付く件数は 1 クエリあたり平均 2.3
 - `jev` が 10 位以内に入れられなかった 1 問は、抽象度の高い方針ページが正解の問いだった
 
+### index をたどる agent との比較（10 問）
+
+同じ評価セットから seed 固定で 10 問を選び、context が空の subagent（Claude Sonnet）に 1 問ずつ渡した。subagent は `index.md` → domain の `index.md` → 候補ページの本文、の順に Read だけでたどる。grep は禁止した。
+
+| 方式 | 正解が 1 位 | 所要時間 | routing で増える context |
+| --- | --- | --- | --- |
+| index をたどる subagent | 10 / 10 | 17〜34 秒（中央値 24 秒） | 平均 29k token（Read 3〜7 回） |
+| `jev` | 9 / 10（残り 1 問は 2 位） | 中央値 0.56 秒 | 上位 5 件の path を返すだけなら約 200 token |
+| `llm` | 10 / 10 | 中央値 8.6 秒 | 同上 |
+| `bigram` | 7 / 10（残り 3 問は 3 位） | 1 ミリ秒未満 | 同上 |
+
+- subagent の token は、何もしない subagent の 72k token を差し引いた増分。増分の大半は domain の一覧（tech の `index.md` だけで約 37KB）を読む分で、正解ページの本文を読む分は答えるためにどのみち要る
+- 10 問では精度の差は検出できない。差が出たのは時間と context で、どちらも 2 桁違う
+
 精度は `llm` がわずかに上で、速度は `jev` が約 20 倍速い。ただし「分かっている弱点」のとおり、問いを作った model と `llm` router が同じなので、精度の差はそのまま受け取れない。
