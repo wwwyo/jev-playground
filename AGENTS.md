@@ -7,8 +7,10 @@ LLM の prompt-and-parse を構造化された判断に置き換えられるか�
 
 ```
 jev-playground/
-├── examples/        1 ファイル 1 実験の直線的な script
-├── results/         実験の出力（gitignore）
+├── examples/        API の動作確認用の見本
+├── <poc>/           PoC ごとのコード（例: wiki-routing/）
+├── docs/<poc>/      同名の dir に、その PoC で何を作り何を確かめるかを書く
+├── results/<poc>/   実験の出力（gitignore）
 ├── bunfig.toml      exact pin + 7 日 cooldown
 └── mise.toml        bun の版
 ```

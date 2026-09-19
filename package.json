@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "wiki-routing:queries": "bun run wiki-routing/generate-queries.ts",
+    "wiki-routing:evaluate": "bun run wiki-routing/evaluate.ts"
   },
   "dependencies": {
     "@typesafe-ai/sdk": "0.5.7"
